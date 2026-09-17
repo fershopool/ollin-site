@@ -1,0 +1,11 @@
+import projects from '../data/projects.json' with { type: 'json' };
+import principles from '../data/principles.json' with { type: 'json' };
+import capabilities from '../data/capabilities.json' with { type: 'json' };
+import impact from '../data/impact.json' with { type: 'json' };
+import articles from '../data/articles.json' with { type: 'json' };
+import { isVisible } from '../config/content-status.js';
+export const getProjects = () => projects.filter(isVisible);
+export const getPrinciples = () => principles;
+export const getCapabilities = () => capabilities;
+export const getImpact = () => impact;
+export const getArticles = () => articles.filter(isVisible);

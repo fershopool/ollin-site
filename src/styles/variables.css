@@ -1,0 +1,2 @@
+:root { color-scheme: light; --paper:#F7F5EF; --pine:#2E3A34; --stone:#5B5B57; --surface:#FFFFFF; --line:#D8D7CD; --motion:#0F5D59; --terracotta:#B64A3A; --maize:#D3A447; --max:1280px; --shadow:0 18px 44px rgb(46 58 52 / 10%); }
+[data-theme="dark"] { color-scheme: dark; --paper:#18211D; --pine:#F7F5EF; --stone:#C4C5BC; --surface:#24312B; --line:#435148; --motion:#75C9BE; --terracotta:#F08A76; --maize:#E5BD58; --shadow:0 18px 44px rgb(0 0 0 / 28%); }
