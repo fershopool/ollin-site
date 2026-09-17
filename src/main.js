@@ -1,9 +1,13 @@
-import './styles/app.css';
 import { el, $, announce } from './utils/dom.js';
 import { routes, routeForPath } from './config/routes.js';
 import { getProjects, getPrinciples, getCapabilities, getImpact, getArticles } from './services/content.service.js';
 import { getContactChannel } from './services/external-channel.service.js';
 import { renderShell, renderFooter } from './components/shell.js';
+
+const stylesheet = document.createElement('link');
+stylesheet.rel = 'stylesheet';
+stylesheet.href = new URL('./styles/app.css', import.meta.url);
+document.head.append(stylesheet);
 import { projectCard, principleCard, impactCard, articleCard } from './components/cards.js';
 
 const projects = getProjects();
