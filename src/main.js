@@ -7,7 +7,7 @@ import { createCodexLoop } from './components/codex-loop.js';
 
 const stylesheet = document.createElement('link');
 stylesheet.rel = 'stylesheet';
-stylesheet.href = new URL('./styles/app.css', import.meta.url);
+stylesheet.href = `${new URL('./styles/app.css', import.meta.url).href}?v=20260918-hero`;
 document.head.append(stylesheet);
 import { projectCard, principleCard, impactCard, articleCard } from './components/cards.js';
 
@@ -16,7 +16,7 @@ const principles = getPrinciples();
 const capabilities = getCapabilities();
 const impact = getImpact();
 const articles = getArticles();
-const portadaAsset = new URL('./assets/brand/portada.png', import.meta.url).href;
+const portadaAsset = `${new URL('./assets/brand/portada.png', import.meta.url).href}?v=20260918-hero`;
 
 function section(className = '', children = [], id = '') { return el('section', { className: `section ${className}`, id }, [el('div', { className: 'container' }, children)]); }
 function heading(eyebrow, title, description) { return el('div', { className: 'section-heading' }, [el('span', { className: 'eyebrow', text: eyebrow }), el('h2', { text: title }), description ? el('p', { text: description }) : null]); }
