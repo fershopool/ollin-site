@@ -1,1 +1,1 @@
-export const siteBase = "/ollin-site/" ;
+export const siteBase = "/" ;
