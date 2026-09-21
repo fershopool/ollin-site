@@ -64,3 +64,37 @@
 @media(max-width:800px){.ecosystem-stage{perspective:none;transform:none!important}.ecosystem-layer--projects,.ecosystem-layer--capabilities,.ecosystem-layer--principles{transform:none}.ecosystem-core{transform:none}.ecosystem-node:hover,.ecosystem-node:focus-visible,.ecosystem-node.is-active{transform:none}}
 @media(prefers-reduced-motion:reduce){.ecosystem-stage{transform:none!important}.ecosystem-layer--projects,.ecosystem-layer--capabilities,.ecosystem-layer--principles{transform:none}.ecosystem-core{transform:translate(-50%,-50%)}}
 .ecosystem-orbit,.ecosystem-core-glow{animation:none}
+
+/* Final layout pass: keep every label inside the frame and make the scroll depth reversible. */
+.ecosystem-diagram{container-type:inline-size;--scroll-tilt:0deg;--scroll-shift:0px;--projects-rise:0px;--capabilities-rise:0px;--principles-rise:0px}
+.ecosystem-stage{transform-origin:50% 50%;will-change:transform;transform:perspective(1500px) rotateX(var(--scroll-tilt)) translateY(var(--scroll-shift))}
+.ecosystem-layer--projects{--layer-depth:54px;--label-depth:-54px;transform:translateZ(var(--layer-depth)) translateY(var(--projects-rise))}
+.ecosystem-layer--capabilities{--layer-depth:28px;--label-depth:-28px;transform:translateZ(var(--layer-depth)) translateY(var(--capabilities-rise))}
+.ecosystem-layer--principles{--layer-depth:4px;--label-depth:-4px;transform:translateZ(var(--layer-depth)) translateY(var(--principles-rise))}
+.ecosystem-layer-label{display:inline-flex;align-items:center;max-width:min(90%,230px);white-space:normal;line-height:1.08;text-align:left;overflow-wrap:normal;transform:translateZ(var(--label-depth))}
+.ecosystem-layer--projects .ecosystem-layer-label{top:1.7rem;left:1rem;transform:translateZ(var(--label-depth))}
+.ecosystem-layer--capabilities .ecosystem-layer-label{top:38%;left:1rem;transform:translateZ(var(--label-depth))}
+.ecosystem-layer--principles .ecosystem-layer-label{right:auto;bottom:1rem;left:1rem;transform:translateZ(var(--label-depth))}
+.ecosystem-node{max-width:18%;min-width:0;white-space:normal;overflow-wrap:break-word;line-height:1.15}
+.ecosystem-node>span:last-child{min-width:0}
+.ecosystem-core{width:154px;height:154px}
+@container (max-width:760px){
+  .ecosystem-toolbar{align-items:flex-start;flex-direction:column;gap:.55rem}
+  .ecosystem-stage{display:grid;gap:.8rem;min-height:0;aspect-ratio:auto;perspective:none;transform:none!important}
+  .ecosystem-lines{display:none}
+  .ecosystem-core{position:relative;top:auto;left:auto;order:-1;width:142px;height:142px;margin:1rem auto 1.3rem;transform:none}
+  .ecosystem-layer{position:relative;inset:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem;padding:3.05rem .15rem .8rem;transform:none}
+  .ecosystem-layer::before{display:none}
+  .ecosystem-layer-label,.ecosystem-layer--projects .ecosystem-layer-label,.ecosystem-layer--capabilities .ecosystem-layer-label,.ecosystem-layer--principles .ecosystem-layer-label{top:.55rem;right:auto;bottom:auto;left:.15rem;max-width:calc(100% - .3rem);transform:none}
+  .ecosystem-node{position:relative;top:auto;left:auto;width:100%;max-width:none;min-height:44px;transform:none}
+  .ecosystem-node:hover,.ecosystem-node:focus-visible,.ecosystem-node.is-active{transform:none}
+}
+@container (max-width:520px){
+  .ecosystem-layer{grid-template-columns:1fr}
+  .ecosystem-node{font-size:.8rem}
+  .ecosystem-legend{display:grid;gap:.45rem}
+}
+@media(prefers-reduced-motion:reduce){
+  .ecosystem-stage{transform:none!important;will-change:auto}
+  .ecosystem-layer--projects,.ecosystem-layer--capabilities,.ecosystem-layer--principles{transform:none}
+}

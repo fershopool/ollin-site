@@ -6,11 +6,11 @@ const layers = [
     label: 'Experiencias y proyectos',
     className: 'ecosystem-layer--projects',
     nodes: [
-      { id: 'cuicoyan', label: 'Cuicoyan', position: { x: '8%', y: '13%', svg: [110, 110] } },
-      { id: 'calpulli', label: 'UPIICSA Calpolli', position: { x: '28%', y: '8%', svg: [295, 78] } },
-      { id: 'tlatolli', label: 'Tlatolli', position: { x: '48%', y: '8%', svg: [480, 78] } },
-      { id: 'yancuic', label: 'Yancuic Tech', position: { x: '68%', y: '12%', svg: [665, 100] } },
-      { id: 'future', label: 'Futuras iniciativas', position: { x: '88%', y: '16%', svg: [885, 120] } },
+      { id: 'cuicoyan', label: 'Cuicoyan', position: { x: '8%', y: '16%', svg: [110, 128] } },
+      { id: 'calpulli', label: 'UPIICSA Calpolli', position: { x: '28%', y: '14%', svg: [295, 110] } },
+      { id: 'tlatolli', label: 'Tlatolli', position: { x: '48%', y: '14%', svg: [480, 110] } },
+      { id: 'yancuic', label: 'Yancuic Tech', position: { x: '68%', y: '16%', svg: [665, 128] } },
+      { id: 'future', label: 'Futuras iniciativas', position: { x: '88%', y: '19%', svg: [885, 148] } },
     ],
   },
   {
@@ -20,8 +20,8 @@ const layers = [
     nodes: [
       { id: 'identity', label: 'Identidad y acceso', position: { x: '8%', y: '48%', svg: [100, 375] } },
       { id: 'communication', label: 'Comunicación', position: { x: '24%', y: '51%', svg: [250, 390] } },
-      { id: 'territory', label: 'Mapas y territorio', position: { x: '39%', y: '48%', svg: [390, 370] } },
-      { id: 'data', label: 'Datos con propósito', position: { x: '61%', y: '48%', svg: [610, 370] } },
+      { id: 'territory', label: 'Mapas y territorio', position: { x: '34%', y: '48%', svg: [340, 370] } },
+      { id: 'data', label: 'Datos con propósito', position: { x: '66%', y: '48%', svg: [660, 370] } },
       { id: 'interoperability', label: 'Interoperabilidad', position: { x: '76%', y: '51%', svg: [760, 390] } },
       { id: 'responsible-ai', label: 'IA responsable', position: { x: '90%', y: '48%', svg: [900, 375] } },
     ],
@@ -124,8 +124,14 @@ export function createEcosystemDiagram() {
     scrollFrame = 0;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const bounds = diagram.getBoundingClientRect();
-    const progress = Math.max(-0.55, Math.min(1.15, (window.innerHeight * 0.7 - bounds.top) / (window.innerHeight + bounds.height) * 1.9));
+    const progress = Math.max(0, Math.min(1, (window.innerHeight - bounds.top) / (window.innerHeight + bounds.height)));
+    const centered = progress * 2 - 1;
     diagram.style.setProperty('--scroll-progress', progress.toFixed(3));
+    diagram.style.setProperty('--scroll-tilt', `${(centered * -4.2).toFixed(2)}deg`);
+    diagram.style.setProperty('--scroll-shift', `${(centered * -12).toFixed(2)}px`);
+    diagram.style.setProperty('--projects-rise', `${(centered * -9).toFixed(2)}px`);
+    diagram.style.setProperty('--capabilities-rise', `${(centered * -3).toFixed(2)}px`);
+    diagram.style.setProperty('--principles-rise', `${(centered * 7).toFixed(2)}px`);
   };
   const requestScrollMotion = () => {
     if (scrollFrame) return;

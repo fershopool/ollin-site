@@ -8,7 +8,7 @@ import { createEcosystemDiagram } from './components/ecosystem-diagram.js';
 
 const stylesheet = document.createElement('link');
 stylesheet.rel = 'stylesheet';
-stylesheet.href = `${new URL('./styles/app.css', import.meta.url).href}?v=20260920-3dscroll`;
+stylesheet.href = `${new URL('./styles/app.css', import.meta.url).href}?v=20260920-3dscroll-layout`;
 document.head.append(stylesheet);
 import { projectCard, principleCard, impactCard, articleCard } from './components/cards.js';
 
