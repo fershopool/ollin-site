@@ -56,12 +56,6 @@ const relations = [
 ];
 
 const nodeMap = new Map(layers.flatMap((layer) => layer.nodes.map((node) => [node.id, node])));
-const relationMap = new Map([...nodeMap.keys()].map((id) => [id, new Set()]));
-relations.forEach(([from, to]) => {
-  relationMap.get(from).add(to);
-  relationMap.get(to).add(from);
-});
-
 function connectionPath(from, to) {
   const [x1, y1] = nodeMap.get(from).position.svg;
   const [x2, y2] = nodeMap.get(to).position.svg;
@@ -70,23 +64,7 @@ function connectionPath(from, to) {
   return `M ${x1} ${y1} C ${x1 + bend} ${y1 + 55 * direction}, ${x2 - bend} ${y2 - 55 * direction}, ${x2} ${y2}`;
 }
 
-function getNeighborhood(id) {
-  const found = new Set([id]);
-  let frontier = [id];
-  for (let depth = 0; depth < 2; depth += 1) {
-    frontier = frontier.flatMap((current) => [...(relationMap.get(current) || [])].filter((next) => !found.has(next)));
-    frontier.forEach((next) => found.add(next));
-  }
-  return found;
-}
-
-function pathIsRelated(path, activeIds) {
-  return path.dataset.nodes.split(' ').some((id) => activeIds.has(id));
-}
-
 export function createEcosystemDiagram() {
-  const nodeButtons = [];
-  const paths = [];
   const stage = el('div', { className: 'ecosystem-stage' });
   const diagram = el('div', { className: 'ecosystem-diagram', attrs: { 'aria-labelledby': 'ecosystem-interaction-title' } });
 
@@ -103,7 +81,6 @@ export function createEcosystemDiagram() {
     el('circle', { className: 'ecosystem-core-glow', cx: '500', cy: '390', r: '132', fill: 'url(#ecosystem-core-glow)' }),
     ...relations.map(([from, to]) => {
       const path = el('path', { className: 'ecosystem-path', d: connectionPath(from, to), attrs: { 'data-nodes': `${from} ${to}` } });
-      paths.push(path);
       return path;
     }),
   ]);
@@ -119,13 +96,12 @@ export function createEcosystemDiagram() {
       el('span', { className: 'ecosystem-layer-label', text: layer.label }),
     ]);
     layer.nodes.forEach((node) => {
-      const button = el('button', {
+      const nodeElement = el('span', {
         className: `ecosystem-node ecosystem-node--${layer.key}`,
         style: `--node-x:${node.position.x};--node-y:${node.position.y}`,
-        attrs: { type: 'button', 'data-node': node.id, 'aria-pressed': 'false', 'aria-label': `${node.label}, ${layer.label}` },
+        attrs: { 'data-node': node.id, 'aria-label': `${node.label}, ${layer.label}` },
       }, [el('span', { className: 'ecosystem-node-dot', attrs: { 'aria-hidden': 'true' } }), el('span', { text: node.label })]);
-      nodeButtons.push(button);
-      layerElement.append(button);
+      layerElement.append(nodeElement);
     });
     stage.append(layerElement);
   });
@@ -133,77 +109,31 @@ export function createEcosystemDiagram() {
   stage.append(svg, core);
   const title = el('h3', { className: 'sr-only', id: 'ecosystem-interaction-title', text: 'Explora las conexiones del ecosistema OLLIN' });
   const toolbar = el('div', { className: 'ecosystem-toolbar' }, [
-    el('span', { className: 'demo', text: 'Explora las conexiones' }),
-    el('p', { className: 'ecosystem-hint', text: 'Pasa el cursor o enfoca un nodo para ver cómo se conecta.' }),
+    el('span', { className: 'demo', text: 'Ecosistema en movimiento' }),
+    el('p', { className: 'ecosystem-hint', text: 'Desplázate para revelar la profundidad de sus conexiones.' }),
   ]);
-  const status = el('p', { className: 'ecosystem-status', attrs: { 'aria-live': 'polite' }, text: 'Todas las relaciones visibles' });
+  const status = el('p', { className: 'ecosystem-status', text: 'Una base común que se despliega en tres planos.' });
   const legend = el('div', { className: 'ecosystem-legend', attrs: { 'aria-label': 'Leyenda del diagrama' } }, [
     el('span', { className: 'ecosystem-legend-item ecosystem-legend-item--projects', text: 'Experiencias y proyectos' }),
     el('span', { className: 'ecosystem-legend-item ecosystem-legend-item--capabilities', text: 'Capacidades compartidas' }),
     el('span', { className: 'ecosystem-legend-item ecosystem-legend-item--principles', text: 'Principios y base' }),
   ]);
 
-  let pinnedNode = null;
-  const clearActive = () => {
-    if (pinnedNode) return;
-    diagram.dataset.active = 'none';
-    nodeButtons.forEach((node) => {
-      node.classList.remove('is-active');
-      node.setAttribute('aria-pressed', 'false');
-    });
-    paths.forEach((path) => path.classList.remove('is-active'));
-    status.textContent = 'Todas las relaciones visibles';
-  };
-  const activate = (id) => {
-    const activeIds = getNeighborhood(id);
-    const selected = nodeMap.get(id);
-    diagram.dataset.active = id;
-    nodeButtons.forEach((node) => {
-      const isActive = activeIds.has(node.dataset.node);
-      node.classList.toggle('is-active', isActive);
-      node.setAttribute('aria-pressed', node.dataset.node === id ? 'true' : 'false');
-    });
-    paths.forEach((path) => path.classList.toggle('is-active', pathIsRelated(path, activeIds)));
-    status.textContent = `${selected.label}: muestra sus relaciones dentro del ecosistema.`;
-  };
-
-  nodeButtons.forEach((button) => {
-    button.addEventListener('pointerenter', () => activate(button.dataset.node));
-    button.addEventListener('focus', () => activate(button.dataset.node));
-    button.addEventListener('pointerleave', clearActive);
-    button.addEventListener('mouseenter', () => activate(button.dataset.node));
-    button.addEventListener('mouseleave', clearActive);
-    button.addEventListener('touchstart', () => activate(button.dataset.node), { passive: true });
-    button.addEventListener('blur', clearActive);
-    button.addEventListener('click', () => {
-      pinnedNode = pinnedNode === button.dataset.node ? null : button.dataset.node;
-      if (pinnedNode) activate(pinnedNode);
-      else clearActive();
-    });
-  });
-
-  const handlePointerMove = (event) => {
+  let scrollFrame = 0;
+  const updateScrollMotion = () => {
+    scrollFrame = 0;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const bounds = stage.getBoundingClientRect();
-    const x = ((event.clientX - bounds.left) / bounds.width - 0.5) * 12;
-    const y = ((event.clientY - bounds.top) / bounds.height - 0.5) * 8;
-    stage.style.setProperty('--pointer-x', `${x.toFixed(2)}px`);
-    stage.style.setProperty('--pointer-y', `${y.toFixed(2)}px`);
+    const bounds = diagram.getBoundingClientRect();
+    const progress = Math.max(-0.55, Math.min(1.15, (window.innerHeight * 0.7 - bounds.top) / (window.innerHeight + bounds.height) * 1.9));
+    diagram.style.setProperty('--scroll-progress', progress.toFixed(3));
   };
-  const resetPointer = () => {
-    stage.style.setProperty('--pointer-x', '0px');
-    stage.style.setProperty('--pointer-y', '0px');
+  const requestScrollMotion = () => {
+    if (scrollFrame) return;
+    scrollFrame = window.requestAnimationFrame(updateScrollMotion);
   };
-  stage.addEventListener('pointermove', handlePointerMove);
-  stage.addEventListener('pointerleave', resetPointer);
-  stage.addEventListener('mousemove', handlePointerMove);
-  stage.addEventListener('mouseleave', resetPointer);
-  diagram.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape') return;
-    pinnedNode = null;
-    clearActive();
-    nodeButtons[0]?.focus();
-  });
+  window.addEventListener('scroll', requestScrollMotion, { passive: true });
+  window.addEventListener('resize', requestScrollMotion);
+  requestScrollMotion();
 
   diagram.append(title, toolbar, stage, legend, status);
   return diagram;
