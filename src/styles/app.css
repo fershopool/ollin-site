@@ -221,9 +221,15 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
 .eco.is-ready .eco-node,.eco.is-ready .eco-core{transition-delay:calc(var(--i,0) * 45ms)}
 @media(max-width:760px){
   .eco-stage{aspect-ratio:auto;container-type:inline-size;position:relative;display:grid;gap:1.7rem}
-  .eco-stage::before{content:'';position:absolute;z-index:0;top:60cqw;bottom:1.2rem;left:50%;width:2px;translate:-50% 0;background:linear-gradient(var(--c-projects),var(--c-capabilities) 55%,var(--c-principles));opacity:.75}
   .eco-mini{position:relative;display:block;container-type:inline-size;aspect-ratio:1000 / 620}
   .eco-lines{display:block}
+  .eco-frame{gap:1.7rem}.eco-stage{display:contents}.eco-tabs{margin-bottom:-.7rem}
+  .eco-branch[data-tier=projects]{order:0}.eco-mini{order:1}.eco-branch[data-tier=capabilities]{order:2}.eco-branch[data-tier=principles]{order:3}
+  .eco-mini::before,.eco-mini::after,.eco-branch[data-tier=capabilities]::after{content:'';position:absolute;z-index:0;left:50%;width:2px;translate:-50% 0;opacity:.75;pointer-events:none}
+  .eco-mini::before{bottom:85.5%;height:calc(14.5% + 1.7rem);background:var(--c-projects)}
+  .eco-mini::after{top:48.4%;bottom:-1.7rem;background:linear-gradient(var(--c-projects),var(--c-capabilities))}
+  .eco-branch[data-tier=capabilities]::after{top:100%;height:1.7rem;background:linear-gradient(var(--c-capabilities),var(--c-principles))}
+  .eco:not([data-tier=all]) .eco-mini::after,.eco:not([data-tier=all]) .eco-branch::after{display:none}
   .eco-line{opacity:.55}
   .eco-core{width:17cqw;height:17cqw}
   .eco-dot{position:absolute;z-index:3;display:block;width:11px;height:11px;padding:0;border:0;border-radius:50%;translate:-50% -50%;background:var(--c);box-shadow:0 0 8px var(--c);transition:scale .2s}
@@ -232,6 +238,7 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
   .eco-dot[data-tier=projects]{--c:var(--c-projects)}.eco-dot[data-tier=capabilities]{--c:var(--c-capabilities)}.eco-dot[data-tier=principles]{--c:var(--c-principles)}
   .eco-branch{position:relative;z-index:1;display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;padding:1.5rem .8rem 1.1rem;border:1px solid color-mix(in srgb,var(--c) 45%,transparent);border-radius:18px;background:color-mix(in srgb,var(--c) 9%,#101916)}
   .eco-branch::before{content:'';position:absolute;top:-6px;left:50%;width:10px;height:10px;translate:-50% 0;border-radius:50%;background:var(--c);box-shadow:0 0 12px var(--c)}
+  .eco-branch[data-tier=projects]::before{top:auto;bottom:-6px}
   .eco-branch[data-tier=projects]{--c:var(--c-projects)}.eco-branch[data-tier=capabilities]{--c:var(--c-capabilities)}.eco-branch[data-tier=principles]{--c:var(--c-principles)}
   .eco-tier[data-tier],.eco-node{position:static;translate:none;max-width:none;font-size:.85rem}
   .eco-tier{flex-basis:100%;margin-bottom:.3rem;text-align:center!important;font-size:.7rem}.eco-tier strong{font-size:1.02rem}
