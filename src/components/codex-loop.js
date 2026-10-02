@@ -27,7 +27,7 @@ const art = {
 const codexes = [
   ['Memoria', 'Territorio', 'memoria'],
   ['Vínculos', 'Comunidades', 'vinculos'],
-  ['Tlatolli', 'Ideas en conversación', 'tlatolli'],
+  ['Yancuic', 'Ideas en conversación', 'tlatolli'],
   ['Capacidad', 'Tecnología con propósito', 'capacidad'],
   ['Horizonte', 'Oportunidades', 'horizonte'],
 ];

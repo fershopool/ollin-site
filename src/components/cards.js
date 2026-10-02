@@ -7,7 +7,7 @@ export function projectCard(project) {
   const href = internal ? routes.tlatolli : getProjectUrl(project.linkKey);
   const external = !!href && href.startsWith('http');
   const action = href
-    ? el('a', { className: 'project-cta', href, target: external ? '_blank' : undefined, rel: external ? 'noopener noreferrer' : undefined, attrs: external ? { 'aria-label': `Visitar ${project.name} (se abre en una pestaña nueva)` } : {} }, [internal ? 'Ir a Tlatolli' : 'Visitar sitio', el('span', { className: 'project-cta-arrow', text: external ? '↗' : '→', attrs: { 'aria-hidden': 'true' } })])
+    ? el('a', { className: 'project-cta', href, target: external ? '_blank' : undefined, rel: external ? 'noopener noreferrer' : undefined, attrs: external ? { 'aria-label': `Visitar ${project.name} (se abre en una pestaña nueva)` } : {} }, [internal ? 'Ir a Yancuic' : 'Visitar sitio', el('span', { className: 'project-cta-arrow', text: external ? '↗' : '→', attrs: { 'aria-hidden': 'true' } })])
     : el('button', { className: 'project-cta is-disabled', type: 'button', disabled: true, text: 'Próximamente' });
   const status = external ? el('small', { className: 'project-live', text: 'Sitio en línea' }) : el('small', { className: 'muted', text: 'Estado público por verificar' });
   const asset = (name) => new URL(`../assets/projects/${name}`, import.meta.url).href;
