@@ -43,8 +43,14 @@ export function createEcosystemDiagram() {
   const paths = [...svg.querySelectorAll('path')];
 
   const tierEls = Object.entries(TIERS).map(([id, t]) => el('div', { className: 'eco-tier', attrs: { 'data-tier': id }, style: pct(...TIER_LABEL_POS[id]) }, [el('strong', { text: t.label }), el('span', { text: t.sub })]));
+  // Cada nivel agrupa su etiqueta y sus nodos: `display:contents` en escritorio, tarjeta en móvil.
   const core = el('div', { className: 'eco-core', style: pct(...CORE), attrs: { role: 'img', 'aria-label': 'OLLIN' } }, [el('span', { className: 'eco-core-logo' })]);
   const nodes = NODES.map(([tier, name, x, y, text, link], i) => el('button', { className: 'eco-node', type: 'button', text: name, style: `${pct(x, y)};--i:${i}`, attrs: { 'data-tier': tier, 'aria-pressed': 'false' } }));
+
+  // Mini diagrama (solo móvil): un punto por nodo; tocarlo equivale a tocar el chip.
+  const dots = NODES.map(([tier, name, x, y], i) => el('button', { className: 'eco-dot', type: 'button', style: pct(x, y), attrs: { 'data-tier': tier, 'aria-hidden': 'true', tabindex: '-1' }, onClick: () => nodes[i].click() }));
+  const mini = el('div', { className: 'eco-mini' }, [svg, core, ...dots]);
+  const branches = tierEls.map((t) => el('div', { className: 'eco-branch', attrs: { 'data-tier': t.dataset.tier } }, [t, ...nodes.filter((n) => n.dataset.tier === t.dataset.tier)]));
 
   const panel = el('div', { className: 'eco-panel', attrs: { 'aria-live': 'polite' } });
   let tier = 'all', selected = null;
@@ -54,6 +60,7 @@ export function createEcosystemDiagram() {
     root.dataset.tier = tier;
     paths.forEach((p, i) => p.classList.toggle('is-on', i === idx));
     nodes.forEach((n) => n.setAttribute('aria-pressed', String(n === selected)));
+    dots.forEach((d, i) => d.classList.toggle('is-on', i === idx));
     const [t, name, , , text, link] = idx >= 0 ? NODES[idx] : [tier, null, 0, 0, tier === 'all' ? 'Toca o pasa el cursor sobre un nodo para ver cómo se conecta con la base común.' : TIERS[tier].text, TIERS[tier]?.link];
     const [kicker, title] = name ? [TIERS[t].label, name] : [tier === 'all' ? 'Vista del ecosistema' : TIERS[tier].label, null];
     panel.replaceChildren(el('span', { className: 'eco-kicker', attrs: { 'data-tier': t === 'all' ? '' : t }, text: kicker }), ...(title ? [el('strong', { text: title })] : []), el('p', { text }), ...(link ? [el('a', { href: link[1], text: `${link[0]} →` })] : []));
@@ -70,7 +77,7 @@ export function createEcosystemDiagram() {
   root.append(
     el('div', { className: 'eco-frame' }, [
       el('div', { className: 'eco-tabs', attrs: { role: 'group', 'aria-label': 'Filtrar por nivel' } }, tabs),
-      el('div', { className: 'eco-stage' }, [svg, ...tierEls, core, ...nodes]),
+      el('div', { className: 'eco-stage' }, [mini, ...branches]),
       panel,
     ]),
     el('figcaption', { className: 'eco-caption', text: 'Vista conceptual del ecosistema OLLIN.' }),

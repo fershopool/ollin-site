@@ -57,9 +57,11 @@
 /* Ecosistema: la lámina se asienta al entrar. */
 .motion .ecosystem-visual-image{transform:translate3d(0,calc((var(--sp,.5) - .5) * -36px),0);scale:calc(1.12 - var(--sp,.5) * .1);will-change:transform}
 
-/* Isotipo ollin girando con el scroll como marca de agua. */
+/* Isotipo ollin girando con el scroll como marca de agua: solo el trazo (máscara), sin el recuadro del isotipo invertido. */
 .motion main>.section.dark,.motion #sobre-ollin{overflow:hidden}
-.motion main>.section.dark::after,.motion #sobre-ollin::after{content:'';position:absolute;z-index:0;top:50%;right:-8%;width:min(52vw,560px);aspect-ratio:194 / 177;background:url('../assets/brand/isotipoinvertido.svg') center / contain no-repeat;opacity:.08;transform:translateY(-50%) rotate(calc(var(--sp,0) * 180deg - 50deg));pointer-events:none}
-.motion #sobre-ollin::after{right:auto;left:-10%;background-image:url('../assets/brand/isotipo.svg');opacity:.07}
+.motion main>.section.dark>.container{position:relative;z-index:1}
+.motion main>.section.dark::after,.motion #sobre-ollin::after{content:'';position:absolute;z-index:0;top:50%;right:-4%;width:min(46vw,520px);aspect-ratio:194 / 177;background:#F7F5EF;-webkit-mask:url('../assets/brand/isotipo.svg') center / contain no-repeat;mask:url('../assets/brand/isotipo.svg') center / contain no-repeat;opacity:.09;transform:translateY(-50%) rotate(calc(var(--sp,0) * 180deg - 50deg));pointer-events:none}
+.motion[data-theme="dark"] main>.section.dark::after{background:#2E3A34;opacity:.07}
+.motion #sobre-ollin::after{right:auto;left:-10%;background:var(--pine,#2E3A34);-webkit-mask-image:url('../assets/brand/isotipo.svg');mask-image:url('../assets/brand/isotipo.svg');opacity:.07}
 
-@media(max-width:800px){.motion .hero--cover .hero-media img{transform:translate3d(0,calc(var(--hp,0) * 50px),0)}.motion main>.section.dark::after,.motion #sobre-ollin::after{width:80vw}}
+@media(max-width:800px){.motion .hero--cover .hero-media img{transform:translate3d(0,calc(var(--hp,0) * 50px),0)}.motion main>.section.dark::after,.motion #sobre-ollin::after{width:80vw}.motion main>.section.dark::after{right:-22%}}
