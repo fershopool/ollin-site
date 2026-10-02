@@ -9,7 +9,7 @@ import { initMotion } from './components/motion.js';
 
 const stylesheet = document.createElement('link');
 stylesheet.rel = 'stylesheet';
-stylesheet.href = `${new URL('./styles/app.css', import.meta.url).href}?v=20261001-dark`;
+stylesheet.href = `${new URL('./styles/app.css', import.meta.url).href}?v=20261001-principios`;
 document.head.append(stylesheet);
 import { projectCard, principleCard, impactCard, articleCard } from './components/cards.js';
 

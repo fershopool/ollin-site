@@ -45,7 +45,7 @@
 .motion .tilt:hover::after{opacity:1}
 .motion .project-mark,.motion .principle-icon{transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 .motion .project-card:hover .project-mark{transform:rotate(-8deg) scale(1.08)}
-.motion .principle-card:hover .principle-icon{transform:rotate(180deg) scale(1.1)}
+.motion .principle-card:hover .principle-icon{transform:rotate(-6deg) scale(1.08)}
 .motion .impact-card:hover .impact-number{color:var(--terracotta)}
 
 /* Códices: elevación y zoom de la lámina; la velocidad del loop la acopla motion.js al scroll. */

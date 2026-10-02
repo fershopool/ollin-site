@@ -43,7 +43,7 @@ export function createEcosystemDiagram() {
   const paths = [...svg.querySelectorAll('path')];
 
   const tierEls = Object.entries(TIERS).map(([id, t]) => el('div', { className: 'eco-tier', attrs: { 'data-tier': id }, style: pct(...TIER_LABEL_POS[id]) }, [el('strong', { text: t.label }), el('span', { text: t.sub })]));
-  const core = el('div', { className: 'eco-core', style: pct(...CORE), text: 'OLLIN' });
+  const core = el('div', { className: 'eco-core', style: pct(...CORE), attrs: { role: 'img', 'aria-label': 'OLLIN' } }, [el('span', { className: 'eco-core-logo' })]);
   const nodes = NODES.map(([tier, name, x, y, text, link], i) => el('button', { className: 'eco-node', type: 'button', text: name, style: `${pct(x, y)};--i:${i}`, attrs: { 'data-tier': tier, 'aria-pressed': 'false' } }));
 
   const panel = el('div', { className: 'eco-panel', attrs: { 'aria-live': 'polite' } });
