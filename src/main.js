@@ -5,10 +5,11 @@ import { getContactChannel } from './services/external-channel.service.js';
 import { renderShell, renderFooter } from './components/shell.js';
 import { createCodexLoop } from './components/codex-loop.js';
 import { createEcosystemDiagram } from './components/ecosystem-diagram.js';
+import { initMotion } from './components/motion.js';
 
 const stylesheet = document.createElement('link');
 stylesheet.rel = 'stylesheet';
-stylesheet.href = `${new URL('./styles/app.css', import.meta.url).href}?v=20260920-ecosistema-image`;
+stylesheet.href = `${new URL('./styles/app.css', import.meta.url).href}?v=20260930-motion`;
 document.head.append(stylesheet);
 import { projectCard, principleCard, impactCard, articleCard } from './components/cards.js';
 
@@ -66,3 +67,4 @@ function renderNotFound() { return frame('404', 'Esta ruta todavía no existe.',
 
 const route = routeForPath(); renderShell(route); switch (route) { case 'home': renderHome(); break; case 'proyectos': renderProjects(); break; case 'principios': renderPrinciples(); break; case 'tecnologia': renderTechnology(); break; case 'impacto': renderImpact(); break; case 'sobre': renderAbout(); break; case 'tlatolli': renderTlatolli(); break; case 'contacto': renderContact(); break; case 'privacidad': renderPrivacy(); break; case 'ecosistema': renderEcosystem(); break; case 'instituciones': case 'comunidades': case 'talento': case 'propuestas': renderParticipationPlaceholder(route); break; default: renderNotFound(); }
 renderFooter();
+initMotion();

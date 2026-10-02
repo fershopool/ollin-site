@@ -1,0 +1,65 @@
+/* Dinamismo neoprehispánico. Todo bajo `.motion` (la clase la pone motion.js solo si no hay movimiento reducido). */
+:root{--greca:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='16' viewBox='0 0 32 16'%3E%3Cpath d='M0 15h5V1h14v9h-8V5.5h3.5M21 15h11' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='square' stroke-linejoin='miter'/%3E%3C/svg%3E")}
+.scroll-progress{display:none}
+.motion .scroll-progress{position:fixed;inset:0 0 auto;z-index:60;display:block;height:3px;background:linear-gradient(90deg,var(--motion),var(--maize),var(--terracotta));transform:scaleX(var(--p,0));transform-origin:left;pointer-events:none}
+
+/* Entrada por scroll: se anima con keyframes para no pelear con el tilt, que usa transform. */
+.motion .reveal{opacity:0}
+.motion .reveal.in{opacity:1;animation:rise .9s cubic-bezier(.2,.7,.2,1) backwards;animation-delay:calc(var(--i,0) * 110ms)}
+@keyframes rise{from{opacity:0;transform:translate3d(0,34px,0)}}
+
+/* Greca (xicalcoliuhqui) que se dibuja al entrar cada sección y respira con un barrido de color. */
+.motion main>.section{position:relative}
+.motion main>.section>.container{position:relative;z-index:1}
+.motion main>.section::before{content:'';position:absolute;top:0;left:0;right:0;height:16px;background:linear-gradient(90deg,var(--motion),var(--maize),var(--terracotta),var(--maize),var(--motion));background-size:200% 100%;-webkit-mask:var(--greca) repeat-x 0 0/32px 16px;mask:var(--greca) repeat-x 0 0/32px 16px;opacity:0;transform:scaleX(.15);transform-origin:center;transition:opacity 1s ease,transform 1.5s cubic-bezier(.2,.7,.2,1);animation:greca-sweep 16s linear infinite}
+.motion main>.section.in::before{opacity:.8;transform:none}
+@keyframes greca-sweep{to{background-position:-200% 0}}
+.motion .section-heading .eyebrow.glyph::before{content:'';display:inline-block;width:.55em;height:.55em;margin-right:.65em;background:currentColor;transform:rotate(45deg);opacity:0}
+.motion .reveal.in .eyebrow.glyph::before{opacity:1;animation:glyph-spin 1.2s cubic-bezier(.2,.7,.2,1) backwards;animation-delay:.2s}
+@keyframes glyph-spin{from{opacity:0;transform:rotate(-135deg) scale(.2)}}
+
+/* Hero: entrada escalonada, parallax de scroll y de puntero. */
+.motion .hero--cover .hero-media img{scale:1.1;transform:translate3d(calc(var(--mx,0) * -16px),calc(var(--hp,0) * 80px + var(--my,0) * -10px),0);will-change:transform;transition:transform .5s cubic-bezier(.2,.7,.2,1);animation:hero-zoom 2.6s cubic-bezier(.2,.7,.2,1) backwards}
+@keyframes hero-zoom{from{scale:1.28;opacity:.4}}
+.motion .hero--cover .hero-grid{transform:translate3d(0,calc(var(--hp,0) * -46px),0);opacity:calc(1 - var(--hp,0) * 1.25)}
+.motion .hero-copy{animation:rise 1s cubic-bezier(.2,.7,.2,1) .15s backwards}
+.motion .hero-side{animation:rise 1s cubic-bezier(.2,.7,.2,1) .55s backwards}
+.motion .hero-utility,.motion .hero-scroll{animation:fade 1.2s ease .9s backwards}
+@keyframes fade{from{opacity:0}}
+.motion .hero-copy h1 .word{display:inline-block;animation:word-in 1s cubic-bezier(.2,.7,.2,1) backwards;animation-delay:calc(.3s + var(--w,0) * .12s)}
+@keyframes word-in{from{opacity:0;transform:translate3d(0,.55em,0) rotate(3deg);filter:blur(8px)}}
+.motion .hero-scroll::before{transform-origin:left;animation:scroll-cue 2.4s ease-in-out infinite}
+@keyframes scroll-cue{0%{transform:scaleX(.2)}55%{transform:scaleX(1)}100%{transform:scaleX(1);opacity:0}}
+
+/* Header que reaparece al subir, una vez pasado el hero. */
+.motion .site-header--hero{transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.motion .site-header--hero.is-pinned{position:fixed;z-index:50;animation:header-drop .6s cubic-bezier(.2,.7,.2,1) backwards}
+.motion .site-header--hero.is-pinned.is-hidden{transform:translateY(-150%)}
+.motion .site-header--hero.is-pinned .header-inner{background:rgb(12 52 49 / 90%);box-shadow:0 14px 36px rgb(0 0 0 / 22%)}
+@keyframes header-drop{from{transform:translateY(-150%)}}
+
+/* Tarjetas: inclinación 3D con brillo que sigue al puntero. */
+.motion .tilt{position:relative;transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease-out,box-shadow .3s ease}
+.motion .tilt:hover{box-shadow:var(--shadow)}
+.motion .tilt::after{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(420px circle at var(--gx,50%) var(--gy,50%),color-mix(in srgb,var(--maize) 24%,transparent),transparent 42%);opacity:0;transition:opacity .3s;pointer-events:none}
+.motion .tilt:hover::after{opacity:1}
+.motion .project-mark,.motion .principle-icon{transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.motion .project-card:hover .project-mark{transform:rotate(-8deg) scale(1.08)}
+.motion .principle-card:hover .principle-icon{transform:rotate(180deg) scale(1.1)}
+.motion .impact-card:hover .impact-number{color:var(--terracotta)}
+
+/* Códices: elevación y zoom de la lámina; la velocidad del loop la acopla motion.js al scroll. */
+.motion .codex-tile{transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s ease}
+.motion .codex-tile:hover{transform:translateY(-8px) rotate(-.6deg);box-shadow:0 26px 50px rgb(46 58 52 / 20%)}
+.motion .codex-tile-art{transition:background-size .9s cubic-bezier(.2,.7,.2,1)}
+.motion .codex-tile:hover .codex-tile-art{background-size:255%}
+
+/* Ecosistema: la lámina se asienta al entrar. */
+.motion .ecosystem-visual-image{transform:translate3d(0,calc((var(--sp,.5) - .5) * -36px),0);scale:calc(1.12 - var(--sp,.5) * .1);will-change:transform}
+
+/* Isotipo ollin girando con el scroll como marca de agua. */
+.motion main>.section.dark,.motion #sobre-ollin{overflow:hidden}
+.motion main>.section.dark::after,.motion #sobre-ollin::after{content:'';position:absolute;z-index:0;top:50%;right:-8%;width:min(52vw,560px);aspect-ratio:194 / 177;background:url('../assets/brand/isotipoinvertido.svg') center / contain no-repeat;opacity:.08;transform:translateY(-50%) rotate(calc(var(--sp,0) * 180deg - 50deg));pointer-events:none}
+.motion #sobre-ollin::after{right:auto;left:-10%;background-image:url('../assets/brand/isotipo.svg');opacity:.07}
+
+@media(max-width:800px){.motion .hero--cover .hero-media img{transform:translate3d(0,calc(var(--hp,0) * 50px),0)}.motion main>.section.dark::after,.motion #sobre-ollin::after{width:80vw}}
