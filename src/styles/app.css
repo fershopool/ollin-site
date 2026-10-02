@@ -146,3 +146,15 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
 .project-cta:focus-visible{outline:3px solid var(--maize);outline-offset:3px}
 .project-cta.is-disabled{background:var(--line);color:var(--stone);cursor:default}
 [data-theme="dark"] .project-cta{color:#10231f}
+/* Tarjetas de proyecto con vista previa */
+.project-card{padding:0;gap:0;overflow:hidden}
+.project-card .project-body{display:flex;flex:1;flex-direction:column;gap:.7rem;padding:0 1.4rem 1.3rem}
+.project-media{position:relative;aspect-ratio:16/10;margin-bottom:2.2rem;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--motion) 10%,var(--paper))}
+.project-media>img{display:block;width:100%;height:100%;object-fit:cover;object-position:top center;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.project-card.is-linked:hover .project-media>img{transform:scale(1.04)}
+.project-media.is-empty{display:grid;place-items:center;background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--maize) 16%,var(--surface)) 0 14px,color-mix(in srgb,var(--maize) 8%,var(--surface)) 14px 28px)}
+.project-media-soon{padding:.4rem .9rem;border:1px dashed var(--line);border-radius:999px;background:var(--surface);color:var(--stone);font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.project-logo{position:absolute;left:1.4rem;bottom:0;z-index:1;display:grid;width:68px;height:68px;place-items:center;padding:8px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 10px 24px rgb(46 58 52 / 18%);transform:translateY(50%);transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.project-logo img{width:100%;height:100%;object-fit:contain}
+.project-card.is-linked:hover .project-logo{transform:translateY(50%) rotate(-4deg) scale(1.05)}
+@media(prefers-reduced-motion:reduce){.project-media>img,.project-logo{transition:none}.project-card.is-linked:hover .project-media>img{transform:none}.project-card.is-linked:hover .project-logo{transform:translateY(50%)}}
